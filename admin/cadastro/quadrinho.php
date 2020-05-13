@@ -5,7 +5,8 @@
     }
     include "functions.php";
 
-    $id = $titulo = $site = '';
+    if (!isset($id)) $id = "";
+    $titulo = $site = $data = $numero = $tipo =$resumo =  '';
 
     // Verificar se existe um id
     if (!empty($id)) {
@@ -115,8 +116,16 @@
             ?>
         </select>
         
+        <!-- CADASTRO DA CAPA -->
+        <?php
+            $r = 'required data-parsley-required-message="Selecione uma foto"';
+
+            if (empty ($id) ) $r = '';
+        ?>
+
         <label for="capa">Capa</label>
-        <input type="file" name="capa" id="capa" class="form-control" accept=".jpg, .jpeg">
+        <input type="file" name="capa" id="capa" class="form-control" accept=".jpg, .jpeg" <?php $r; ?> >
+        <input type="hidden" name="capa" value="<?$capa?>">
 
         <label for="numero">Número da Edição</label>
         <input type="text" name="numero" id="numero" class="form-control" required

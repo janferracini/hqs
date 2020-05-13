@@ -52,12 +52,38 @@ if ($_POST) {
 
     } else {
         //update
+        //qual arquivo irá ser gravado
+        if (!empty ($_FILES["capa"]["name"])) 
+            $capa = $arquivo;
 
-
+            $sql = "update qudrinho set titulo = :titulo,
+                                        numero = :numero,
+                                        valor = :valor,
+                                        resumo = :resumo,
+                                        capa = :capa,
+                                        tipo_id = :tipo_id,
+                                        editora_id = :editora_id,
+                                        data = :data
+                    where id = :id limit 1";
+            $consulta = $pdo->prepare($sql);
+            $consulta->bindParam(":titulo", $titulo);
+            $consulta->bindParam(":numero", $numero);
+            $consulta->bindParam(":valor", $valor);
+            $consulta->bindParam(":resumo", $resumo);
+            $consulta->bindParam(":capa", $capa);
+            $consulta->bindParam(":tipo_id", $tipo_id);
+            $consulta->bindParam(":editora_id", $editora_id);
+            $consulta->bindParam(":data", $data);
+            $consulta->bindParam(":id", $id);
     }
 
     //executar SQL
     if ( $consulta-> execute() ) {
+
+        //verifica se o arquivo não está sendo enviado
+        if (  ( empty($_FILES["capa"]["type"]) ) and (!empty($id))  ) {
+            
+        }
 
         //verificar se a imagem é .jpeg
         if ($_FILES["capa"]["type"] != "image/jpeg") {
