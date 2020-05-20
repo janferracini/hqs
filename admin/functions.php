@@ -1,5 +1,7 @@
 <?php
 /*
+
+GDLIB biblioteca para manipular imagens
 	    validaCPF - função para validar CPF
 	    Como usar: 
 	    $cpf = "123.123.123-34";
@@ -24,12 +26,10 @@ function validaCPF($cpf)
 	// Faz o calculo para validar o CPF
 	for ($t = 9; $t < 11; $t++) {
 		for ($d = 0, $c = 0; $c < $t; $c++) {
-			$d += $cpf{
-			$c} * (($t + 1) - $c);
+			$d += $cpf[$c] * (($t + 1) - $c);
 		}
 		$d = ((10 * $d) % 11) % 10;
-		if ($cpf{
-		$c} != $d) {
+		if ($cpf[$c] != $d) {
 			return "CPF inválido";
 		}
 	}
@@ -44,23 +44,19 @@ function validaCNPJ($cnpj)
 		return "CNPJ precisa ter ao menos 14 números";
 	// Valida primeiro dígito verificador
 	for ($i = 0, $j = 5, $soma = 0; $i < 12; $i++) {
-		$soma += $cnpj{
-		$i} * $j;
+		$soma += $cnpj[$i] * $j;
 		$j = ($j == 2) ? 9 : $j - 1;
 	}
 	$resto = $soma % 11;
-	if ($cnpj{
-	12} != ($resto < 2 ? 0 : 11 - $resto))
+	if ($cnpj[12] != ($resto < 2 ? 0 : 11 - $resto))
 		return "CNPJ inválido";
 	// Valida segundo dígito verificador
 	for ($i = 0, $j = 6, $soma = 0; $i < 13; $i++) {
-		$soma += $cnpj{
-		$i} * $j;
+		$soma += $cnpj[$i] * $j;
 		$j = ($j == 2) ? 9 : $j - 1;
 	}
 	$resto = $soma % 11;
-	return $cnpj{
-	13} == ($resto < 2 ? 0 : 11 - $resto);
+	return $cnpj[13] == ($resto < 2 ? 0 : 11 - $resto);
 }
 
 /*
@@ -74,9 +70,10 @@ function validaCNPJ($cnpj)
 		Parâmetros: arquivo da imagem (Ex.: fotos/imagem.jpg), novo nome para renomear (Ex.: 12345)
 	*/
 
-function redimensionarImagem($pastaFotos, $imagem, $nome){
+function redimensionarImagem($pastaFotos, $imagem, $nome)
+{
 
-	$imagem = $pastaFotos.$imagem;
+	$imagem = $pastaFotos . $imagem;
 
 	list($largura1, $altura1) = getimagesize($imagem);
 
@@ -130,25 +127,24 @@ function redimensionarImagem($pastaFotos, $imagem, $nome){
 }
 
 // função para formatar a $data
-function formatar($data) {
+function formatar($data)
+{
 	// 20/12/2020 -> 2020/12/20
 	$data = explode("/", $data);
-	return $data[2]."-".$data[1]."-".$data[0];
+	return $data[2] . "-" . $data[1] . "-" . $data[0];
 }
 
-
-
 //formatar valor
-	//12.000,00 -> 120000.00
-function formatarValor($valor) {
+//12.000,00 -> 120000.00
+function formatarValor($valor)
+{
 	$valor = str_replace(".", "", $valor);  // -> 12000,00
 	return str_replace(",", ".", $valor); // -> 12000.00
 }
 
-
-
 //função para retirar os __ do numero
-function retirar($texto){
+function retirar($texto)
+{
 	//12__ -> 12
 	return str_replace("_", "", $texto);
 	//o que substituir, pelo que substiquir, quem substituir

@@ -73,8 +73,10 @@
             ?>
         </select>
 
+        <!-- Listagem da Editora -->
         <label for="editora_id">Editora</label>
-        <input type="text" name="editora" id="">
+        <input type="text" name="editora_id" id="editora_id" class="form-control" list="listaEditoras" 
+        data-parsley-required-message="Selecione uma editora" >
             <datalist id="listaEditoras">
                 <?php
                     $sql = "SELECT id, nome
@@ -88,57 +90,61 @@
                         $id     = $d->id;
                         $nome   = $d->nome;
 
-                        echo "<option value='".$id." - "." $titulo'> </option>"; // ********************************************
+                        echo '<option value=" '.$nome.' - ' .$id.'">';
                     };
                 ?>
-            </datalist>
+            </datalist> 
 
 
+            <!-- FORMA ANTIGA
+        <label for="editora_id">Editora</label>
+		<select name="editora_id" id="editora_id"
+		class="form-control" required 
+		data-parsley-required-message="Selecione uma editora">
+			<option value=""></option>
+			<?php
+			$sql = "select id, nome from editora 
+				order by nome";
+			$consulta = $pdo->prepare($sql);
+			$consulta->execute();
 
-
-        <select name="editora_id" id="editora_id" class="form-control"
-            required data-parsley-required-message="Selecione uma opção">
-            <option value=""></option>
-            <?php
-                $sql = "SELECT id, nome
-                        FROM editora
-                        ORDER BY nome";
-                $consulta = $pdo->prepare($sql);
-                $consulta->execute();
-
-                while ($d = $consulta->fetch(PDO::FETCH_OBJ)) {
-                    //separar os dados
-                    $id     = $d->id;
-                    $nome   = $d->nome;
-
-                    echo '<option value="' . $id . '">' . $nome . '</option>';
-                }
-            ?>
-        </select>
+			while ( $d = $consulta->fetch(PDO::FETCH_OBJ) ) {
+				//separar os dados
+				$id 	= $d->id;
+				$nome 	= $d->nome;
+				echo '<option value="'.$id.'">'.$nome.'</option>';
+			}
+			?>
+		</select>-->
         
         <!-- CADASTRO DA CAPA -->
         <?php
             $r = 'required data-parsley-required-message="Selecione uma foto"';
-
-            if (empty ($id) ) $r = '';
+            //vai mostrar que o campo é requirido por padrão, a não ser que seja uma edição 
+            if ( !isset ( $id ) ) $r = ''; //se não tiver vazio o ID, quer dizer que é inserção e não aparece o required
+            //NÃO FUNCIONOU COM O !EMPTY
         ?>
-
         <label for="capa">Capa</label>
-        <input type="file" name="capa" id="capa" class="form-control" accept=".jpg, .jpeg" <?php $r; ?> >
+        <input type="file" name="capa" id="capa" class="form-control" accept=".jpeg" <?=$r;?> >
+        <!-- guarda o nome da capa para quando editar -->
         <input type="hidden" name="capa" value="<?$capa?>">
 
+        <!-- CADASTRA O NUMETO DA EDIÇÃO -->
         <label for="numero">Número da Edição</label>
         <input type="text" name="numero" id="numero" class="form-control" required
                 data-parsley-required-message="Preencha esse campo">
 
+        <!-- CADASTRA A DATA DE NASCIMENTO -->
         <label for="data">Data de Lançamento</label>
         <input type="text" id="data" name="data" class="form-control" required
                 data-parsley-required-message="Preencha esse campo">
 
+        <!-- CADASTRA O VALOR -->
         <label for="valor">Valor</label>
         <input type="text" id="valor" name="valor" class="form-control" required
                 data-parsley-required-message="Preencha esse campo">
 
+        <!-- CADASTRA O RESUMO -->
         <label for="resumo">Resumo / Descrição</label>
         <textarea type="text" name="resumo" id="resumo" class="form-control" required
                 data-parsley-required-message="Preencha esse campo"></textarea>

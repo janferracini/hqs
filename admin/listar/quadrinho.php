@@ -18,7 +18,11 @@
 		<thead>
 			<tr>
 				<td>ID</td>
-				<td>Nome do Quadrinho</td>
+				<td>Foto</td>
+				<td>Nome do Quadrinho / Número</td>
+				<td>Data</td>
+				<td>Valor</td>
+				<td>Editora</td>
 				<td>Opções</td>
 			</tr>
 		</thead>
@@ -37,6 +41,11 @@
 					//mostrar na tela
 					echo '<tr>
 						<td>'.$id.'</td>
+						<td>'.$capa.'</td>
+						<td>'.$titulo. "/" .$numero.'</td>
+						<td>'.$data.'</td>
+						<td>'.$valor.'</td>
+						<td>'.$editora.'</td>
 						<td>'.$titulo.'</td>
 						<td>
 							<a href="cadastro/cidade/'.$id.'" class="btn btn-success btn-sm">
