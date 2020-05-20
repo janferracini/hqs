@@ -49,8 +49,6 @@
                             <i class="fas fa-trash"></i></a>
                             -->
                             
-
-
                             <button type="button" class="btn btn-danger btn-sm" onclick="excluir('.$id.')">
                                 <i class="fas fa-trash"></i></a>
                             </button>

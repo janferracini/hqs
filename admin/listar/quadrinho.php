@@ -29,8 +29,11 @@
 		<tbody>
 			<?php
 				//buscar as cidades alfabeticamente
-				$sql = "select * from quadrinho 
-				order by titulo";
+				$sql = "SELECT q.id, q.titulo, q.capa, q.valor, q.numero, date_format(q.data, '%d/%m/%Y') dt,e.nome editora
+						FROM quadrinho q 
+						INNER JOIN editora e 
+						ON (e.id = q.editora_id)
+						ORDER BY q.titulo";
 				$consulta = $pdo->prepare($sql);
 				$consulta->execute();
 
@@ -38,25 +41,31 @@
 					//separar os dados
 					$id 		= $dados->id;
 					$titulo 	= $dados->titulo;
-					//mostrar na tela
-					echo '<tr>
-						<td>'.$id.'</td>
-						<td>'.$capa.'</td>
-						<td>'.$titulo. "/" .$numero.'</td>
-						<td>'.$data.'</td>
-						<td>'.$valor.'</td>
-						<td>'.$editora.'</td>
-						<td>'.$titulo.'</td>
-						<td>
-							<a href="cadastro/cidade/'.$id.'" class="btn btn-success btn-sm">
-								<i class="fas fa-edit"></i>
-							</a>
+					$capa		= $dados->capa;
+					$valor		= number_format($dados->valor,2, ",", ".");
+					$numero		=$dados->numero;
+					$data		=$dados->dt;
+					$editora	=$dados->editora;
 
-							<a href="javascript:excluir('.$id.')" class="btn btn-danger btn-sm">
-								<i class="fas fa-trash"></i>
+					$imagem = "../fotos/".$capa."p.jpg";
+
+					//mostrar na tela
+					echo "<tr>
+						<td>$id</td>
+						<td>
+							<img src='$imagem' alt='$titulo' width='50px'></td>
+						<td>$titulo / $numero</td>
+						<td>$data</td>
+						<td>$valor</td>
+						<td>$editora</td>
+						<td>
+							<a href='cadastro/quadrinho/$id'  class='btn btn-success btn-sm'>
+								<i class='fas fa-edit'></i>
 							</a>
+							<a href='javascript:excluir  ($id)' class='btn btn-danger btn-sm'>
+                            <i class='fas fa-trash'></i></a>
 						</td>
-					</tr>';
+					</tr>";
 				}
 			?>
 		</tbody>
