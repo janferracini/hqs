@@ -126,13 +126,20 @@ function redimensionarImagem($pastaFotos, $imagem, $nome)
 	unlink($imagem);
 }
 
-// função para formatar a $data
+//função para formatar a $editora
+function getEditora($editora_id){
+	// Editora - ID -> ID
+	$editora_id = explode("-", $editora_id);
+	return $editora_id[1];
+}
+
 function formatar($data)
 {
 	// 20/12/2020 -> 2020/12/20
 	$data = explode("/", $data);
 	return $data[2] . "-" . $data[1] . "-" . $data[0];
 }
+
 
 //formatar valor
 //12.000,00 -> 120000.00

@@ -23,7 +23,7 @@ if ($_POST) {
     } else if (empty($tipo_id)) {
         echo "<script>alert('Selecione o Tipo do Quadrinho');history.back();</script>";
         exit;
-    }else if (empty($editora_id)) {
+    } else if (empty($editora_id)) {
         echo "<script>alert('Selecione a Editora');history.back();</script>";
         exit;
     }
@@ -34,11 +34,12 @@ if ($_POST) {
     $data   = formatar($data);
     $numero = retirar($numero);
     $valor  = formatarValor($valor);
+    $editora_id = getEditora($editora_id);
 
     //salva a time da máquina + a id de quem está na sessão
     $arquivo = time() . "-" . $_SESSION["hqs"]["id"];
 
-   // echo print_r($_POST);
+    echo print_r($_POST);
     if (empty($id)) {
         //insert
         $sql = "INSERT INTO quadrinho
@@ -59,7 +60,6 @@ if ($_POST) {
         //qual arquivo irá ser gravado
         if (!empty($_FILES["capa"]["name"]))
             $capa = $arquivo;
-            
 
         $sql = "update qudrinho set titulo = :titulo,
                                         numero = :numero,
@@ -90,11 +90,11 @@ if ($_POST) {
         }
 
         //verificar se a imagem é .jpeg
-        if ($_FILES["capa"]["type"] != "image/jpeg") {
+        if ($_FILES["capa"]["type"] != "image/jpeg" or "image/jpg") {
             echo "<script>alert('Selecione uma imagem JEPG válida.');hystory.back();</script>";
             exit;
         }
-        
+
         //copiar a imagem para o servidor
         if (move_uploaded_file($_FILES["capa"]["tmp_name"], "../fotos/" . $_FILES["capa"]["name"])) {
 

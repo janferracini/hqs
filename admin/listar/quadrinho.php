@@ -29,7 +29,13 @@
 		<tbody>
 			<?php
 				//buscar as cidades alfabeticamente
-				$sql = "SELECT q.id, q.titulo, q.capa, q.valor, q.numero, date_format(q.data, '%d/%m/%Y') dt,e.nome editora
+				$sql = "SELECT	q.id, 
+								q.titulo, 
+								q.capa, 
+								q.valor, 
+								q.numero, 
+								date_format(q.data, '%d/%m/%Y') dt,
+								e.nome editora
 						FROM quadrinho q 
 						INNER JOIN editora e 
 						ON (e.id = q.editora_id)
@@ -53,10 +59,10 @@
 					echo "<tr>
 						<td>$id</td>
 						<td>
-							<img src='$imagem' alt='$titulo' width='50px'></td>
+							<img src='$imagem' alt='$titulo' height='50px'></td>
 						<td>$titulo / $numero</td>
 						<td>$data</td>
-						<td>$valor</td>
+						<td>R$ $valor</td>
 						<td>$editora</td>
 						<td>
 							<a href='cadastro/quadrinho/$id'  class='btn btn-success btn-sm'>
