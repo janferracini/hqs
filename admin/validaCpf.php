@@ -1,6 +1,6 @@
 <?php
 	//incluir o arquivo da funcao
-	include "libs/functions.php";
+	include "functions.php";
 
 	$cpf = "";
 	if ( isset ( $_GET["cpf"] ) )

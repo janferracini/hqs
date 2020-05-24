@@ -13,10 +13,14 @@ $titulo = $data = $numero = $resumo =  $capa = $valor = $tipo_id = $editora_id =
 // Verificar se existe um id
 if (!empty($id)) {
     // Selecionar os dados do banco
-    $sql = "SELECT * 
-                FROM quadrinho 
-                WHERE id = ? 
-                LIMIT 1";
+    $sql = "SELECT q.id, q.titulo, date_format(q.data, '%d/%m/%Y') dt, q.numero, q.resumo, q.capa, q.valor, q.tipo_id, q.editora_id,
+                    t.id, t.tipo,
+                    e.id, e.nome
+            FROM quadrinho q
+            inner join editora e
+            inner join tipo t
+            on e.id = q.editora_id and t.id = q.tipo_id 
+            LIMIT 1";
 
     $consulta = $pdo->prepare($sql);
 
@@ -30,13 +34,16 @@ if (!empty($id)) {
     // Separar os dados
     $id         = $dados->id;
     $titulo     = $dados->titulo;
-    $data       = $dados->data;
+    $data       = $dados->dt;
     $numero     = $dados->numero;
     $resumo     = $dados->resumo;
     $capa       = $dados->capa; //apenas o valor
-    $valor      = $dados->valor;
+    $valor      = number_format($dados->valor, 2, ",", ".");
     $tipo_id    = $dados->tipo_id;
     $editora_id = $dados->editora_id;
+    $editora    = $dados->nome;
+    $tipo       = $dados->tipo;
+
     $imagem     = "../fotos/".$capa."p.jpg"; //foto
 } else {
     $id = '';
@@ -60,9 +67,11 @@ if (!empty($id)) {
         <label for="titulo">Título do Quadrinho</label>
         <input type="text" class="form-control" name="titulo" id="titulo" required data-parsley-required-message="Preencha o campo" value="<?= $titulo ?>">
 
-        <label for="tipo_id">Tipo de Quadrinho</label>
-        <select name="tipo_id" id="tipo_id" class="form-control" required data-parsley-required-message="Selecione uma opção">
-            <option value=""></option>
+        <label for="tipo_id">Tipo de Quadrinho <?php print_r($tipo)?></label>
+        <select name="tipo_id" id="tipo_id" class="form-control"
+        required data-parsley-required-message="Selecione uma opção" >
+            <option value=""><?=$tipo?></option>
+            
             <?php
             $sql = "SELECT id, tipo
                     FROM tipo
@@ -83,7 +92,7 @@ if (!empty($id)) {
         <!-- Listagem da Editora -->
         <label for="editora_id">Editora</label>
         <input type="text" name="editora_id" id="editora_id" class="form-control" list="listaEditoras"
-        data-parsley-required-message="Selecione uma editora">
+        data-parsley-required-message="Selecione uma editora" value="<?=$editora . ' - ' . $editora_id?>">
         <datalist id="listaEditoras">
             <?php
             $sql = "SELECT id, nome
@@ -154,11 +163,13 @@ if (!empty($id)) {
 
         <!-- CADASTRA O VALOR -->
         <label for="valor">Valor</label>
-        <input type="text" id="valor" name="valor" class="form-control" required data-parsley-required-message="Preencha esse campo" value="<?= $valor ?>">
+        <input type="text" id="valor" name="valor" class="form-control"
+            required data-parsley-required-message="Preencha esse campo" value="<?= $valor ?>">
 
         <!-- CADASTRA O RESUMO -->
         <label for="resumo">Resumo / Descrição</label>
-        <textarea type="text" name="resumo" id="resumo" class="form-control" required data-parsley-required-message="Preencha esse campo" value="<?= $renumo ?>"></textarea>
+        <textarea type="text" name="resumo" id="resumo" class="form-control"
+            required data-parsley-required-message="Preencha esse campo" ><?=$resumo?></textarea>
 
         <button type="submit" class="btn btn-success margin">
             <i class="fas fa-check"></i> Gravar Dados

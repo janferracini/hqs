@@ -1,8 +1,8 @@
 <?php
-  //verificar se não está logado
-	if ( !isset ( $_SESSION["hqs"]["id"] ) ){
-    	exit;
-	}
+//verificar se não está logado
+if (!isset($_SESSION["hqs"]["id"])) {
+	exit;
+}
 ?>
 
 <div class="container">
@@ -28,8 +28,8 @@
 		</thead>
 		<tbody>
 			<?php
-				//buscar as cidades alfabeticamente
-				$sql = "SELECT	q.id, 
+			//buscar as cidades alfabeticamente
+			$sql = "SELECT	q.id, 
 								q.titulo, 
 								q.capa, 
 								q.valor, 
@@ -40,23 +40,23 @@
 						INNER JOIN editora e 
 						ON (e.id = q.editora_id)
 						ORDER BY q.titulo";
-				$consulta = $pdo->prepare($sql);
-				$consulta->execute();
+			$consulta = $pdo->prepare($sql);
+			$consulta->execute();
 
-				while ( $dados = $consulta->fetch(PDO::FETCH_OBJ) ) {
-					//separar os dados
-					$id 		= $dados->id;
-					$titulo 	= $dados->titulo;
-					$capa		= $dados->capa;
-					$valor		= number_format($dados->valor,2, ",", ".");
-					$numero		=$dados->numero;
-					$data		=$dados->dt;
-					$editora	=$dados->editora;
+			while ($dados = $consulta->fetch(PDO::FETCH_OBJ)) {
+				//separar os dados
+				$id 		= $dados->id;
+				$titulo 	= $dados->titulo;
+				$capa		= $dados->capa;
+				$valor		= number_format($dados->valor, 2, ",", ".");
+				$numero		= $dados->numero;
+				$data		= $dados->dt;
+				$editora	= $dados->editora;
 
-					$imagem = "../fotos/".$capa."p.jpg";
+				$imagem = "../fotos/" . $capa . "p.jpg";
 
-					//mostrar na tela
-					echo "<tr>
+				//mostrar na tela
+				echo "<tr>
 						<td>$id</td>
 						<td>
 							<img src='$imagem' alt='$titulo' height='50px'></td>
@@ -72,7 +72,7 @@
                             <i class='fas fa-trash'></i></a>
 						</td>
 					</tr>";
-				}
+			}
 			?>
 		</tbody>
 	</table>
@@ -80,11 +80,11 @@
 <script>
 	//funcao para perguntar se deseja excluir
 	//se sim direcionar para o endereco de exclusão
-	function excluir( id ) {
+	function excluir(id) {
 		//perguntar - função confirm
-		if ( confirm ( "Deseja mesmo excluir?" ) ) {
+		if (confirm("Deseja mesmo excluir?")) {
 			//direcionar para a exclusao
-			location.href="excluir/quadrinho/"+id;
+			location.href = "excluir/quadrinho/" + id;
 		}
 	}
 </script>
