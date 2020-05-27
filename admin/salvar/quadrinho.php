@@ -61,7 +61,7 @@ if ($_POST) {
         if (!empty($_FILES["capa"]["name"]))
             $capa = $arquivo;
 
-        $sql = "update qudrinho set titulo = :titulo,
+        $sql = "update quadrinho set titulo = :titulo,
                                         numero = :numero,
                                         valor = :valor,
                                         resumo = :resumo,
@@ -90,7 +90,7 @@ if ($_POST) {
         }
 
         //verificar se a imagem é .jpeg
-        if ($_FILES["capa"]["type"] != "image/jpeg" or "image/jpg") {
+        if ($_FILES["capa"]["type"] != "image/jpeg") {
             echo "<script>alert('Selecione uma imagem JEPG válida.');hystory.back();</script>";
             exit;
         }
