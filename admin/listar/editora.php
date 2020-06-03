@@ -14,7 +14,7 @@
 
     <div class="clearfix"></div>
 
-    <table class="table table-striped" id="tabEditoras">
+    <table class="table table-striped table-bordered table-hover" id="tabEditoras">
         <thead>
             <tr>
                 <th>ID</th>
@@ -75,11 +75,12 @@
     $(document).ready(function() {
         $("#tabEditoras").DataTable({
             "language": {
-                "lengthMenu": "Mostrar _MENU_ records per page",
-                "zeroRecords": "Nothing found - sorry",
+                "search": "Buscar",
+                "lengthMenu": "Listar _MENU_ editoras por página",
+                "zeroRecords": "Não encontramos nada :( ",
                 "info": "Mostrando página _PAGE_ de _PAGES_",
-                "infoEmpty": "No records available",
-                "infoFiltered": "(filtered from _MAX_ total records)",
+                "infoEmpty": "Não tem nada aqui :( ",
+                "infoFiltered": "(no total de _MAX_ registros)",
                 "paginate": {
                     "first":      "Primeira",
                     "last":       "Ultima",

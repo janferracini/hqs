@@ -39,7 +39,7 @@ if ($_POST) {
     //salva a time da máquina + a id de quem está na sessão
     $arquivo = time() . "-" . $_SESSION["hqs"]["id"];
 
-    echo print_r($_POST);
+    //echo print_r($_POST);
     if (empty($id)) {
         //insert
         $sql = "INSERT INTO quadrinho

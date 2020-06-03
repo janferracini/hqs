@@ -6,7 +6,7 @@
     }
 
     $cidade = $_GET['cidade'] ?? "";
-    $cidade = $_GET['cidade'] ?? "";
+    $estado = $_GET['estado'] ?? "";
 
     if ((empty ($cidade) ) or (empty($estado) )) {
         echo "Erro";
@@ -16,5 +16,10 @@
     $consulta = $pdo->prepare($sql);
     $consulta->bindParam(":cidade", $cidade);
     $consulta->bindParam(":estado", $estado);
-    $consulta = $pdo->execute;
+    $consulta->execute();
+
+    $d = $consulta->fetch(PDO::FETCH_OBJ);
+
+    if (empty ($d->id)) "Erro";
+    else echo $d->id;
 

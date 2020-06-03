@@ -6,19 +6,44 @@ if (!isset($_SESSION["hqs"]["id"])) {
 
 if (!isset($id)) $id = "";
 $nome = $cpf = $datanascimento = $email = $senha = $cep =
-    $endereco = $complemento = $bairro = $cidade_id = $nome_cidade =
+    $endereco = $complemento = $bairro = $cidade_id = $cidade =
     $foto = $telefone = $celular = $estado = '';
 
 if (!empty($id)) {
     //select nos dados do cliente
-    $sql = "SELECT c.*, ci.cidade, ci.estado FROM cliente c
-                INNER JOIN cidade c on  (ci.id = c.cidade_id)
+    $sql = "SELECT c.*, date_format(c.datanascimento, '%d/%m/%Y,') dt,
+                ci.cidade, ci.estado
+                FROM cliente c
+                INNER JOIN cidade ci on  (ci.id = c.cidade_id)
                 WHERE c.id = :id LIMIT 1";
     $consulta = $pdo->prepare($sql);
     $consulta->bindParam(":id", $id);
-    $consulta->execute;
+    $consulta->execute();
 
     $dados = $consulta->fetch(PDO::FETCH_OBJ);
+
+    if (empty ($dados->id)) {
+        echo "<p class='alert alert-danger'>Cliente não existe</p>";
+    }
+
+    $id             = $dados->id;
+    $nome           = $dados->nome;
+    $cpf            = $dados->cpf;
+    $datanascimento = $dados->dt;
+    $email          = $dados->email;
+    $senha          = $dados->senha;
+    $foto           = $dados->foto;
+    $telefone       = $dados->telefone;
+    $celular        = $dados->celular;
+    $cep            = $dados->cep;
+    $endereco       = $dados->endereco;
+    $complemento    = $dados->complemento;
+    $bairro         = $dados->bairro;
+    $cidade_id      = $dados->cidade_id;
+    $cidade         = $dados->cidade;
+    $estado         = $dados->estado;
+
+
 }
 ?>
 <div class="container">
@@ -32,7 +57,7 @@ if (!empty($id)) {
 
     <form action="salvar/cliente" name="formCadastro" method="post" data-parsley-validate enctype="multipart/form-data">
         <div class="row">
-            <!-- PRIMEIRA LINHA ID e Nome-->
+<!-- PRIMEIRA LINHA ID e Nome-->
             <div class="col-12 col-md-2">
                 <label for="id">ID</label>
                 <input type="text" class="form-control" name="id" id="id" readonly value="<?= $id ?>">
@@ -42,7 +67,7 @@ if (!empty($id)) {
                 <input type="text" name="nome" id="nome" class="form-control" required data-parsley-required-message="Preencha o campo nome" value="<?= $nome ?>" placeholder="Digite seu nome completo">
             </div>
 
-            <!-- SEGUNDA LINHA CPF, Nascimento e Foto -->
+<!-- SEGUNDA LINHA CPF, Nascimento e Foto -->
             <div class="col-12 col-md-4">
                 <label for="cpf">CPF:</label>
                 <input type="text" name="cpf" id="cpf" class="form-control" required data-parsley-required-message="Preencha o campo CPF" value="<?= $cpf ?>" placeholder="Digite seu CPF" onblur="verificarCpf(this.value)">
@@ -57,7 +82,7 @@ if (!empty($id)) {
                 <input type="file" name="foto" id="foto" class="form-control">
             </div>
 
-            <!-- TERCEIRA LINHA E-mail e Senha-->
+<!-- TERCEIRA LINHA E-mail e Senha-->
             <div class="col-12 col-md-4">
                 <label for="email">E-mail:</label>
                 <input type="email" name="email" id="email" class="form-control" required data-parsley-required-message="Preencha o email" value="<?= $email ?>" placeholder="Digite seu email" data-parsley-type-message="Digite um e-mail válido">
@@ -72,60 +97,57 @@ if (!empty($id)) {
                 <input type="password" name="senha2" id="senha2" class="form-control" placeholder="Digite a senha novamente">
             </div>
 
-            <!-- QUARTA LINHA Telefone e Celular-->
+<!-- QUARTA LINHA Telefone, Celular e CEP-->
 
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <label for="telefone">Telefone:</label>
                 <input type="text" name="telefone" id="telefone" class="form-control" value="<?= $telefone ?>" placeholder="Digite seu telefone (00) 0000-0000">
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <label for="celular">Celular:</label>
                 <input type="text" name="celular" id="celular" class="form-control" required data-parsley-required-message="Preencha o telefone" value="<?= $celular ?>" placeholder="Digite o celular (00)00000-0000">
             </div>
-
-            <!-- QUINTA LINHA CEP, Cidade e Estado-->
-
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
                 <label for="cep">CEP:</label>
                 <input type="text" name="cep" id="cep" class="form-control" required data-parsley-required-message="Preencha o CEP" value="<?= $cep ?>" placeholder="Digite seu CEP">
             </div>
+<!-- QUINTA LINHA Endereço e complemento-->
 
-            <div class="col-12 col-md-2">
-                <label for="cidade_id">ID Cidade:</label>
-                <input type="text" name="cidade_id" id="cidade_id" class="form-control" readonly data-parsley-required-message="" value="<?= $cidade_id ?>">
-            </div>
-
-            <div class="col-12 col-md-4">
-                <label for="nome_cidade">Nome da Cidade:</label>
-                <input type="text" id="nome_cidade" class="form-control" data-parsley-required-message="Preencha a cidade" value="<?= $nome_cidade ?>" placeholder="Digite seu cidade">
-                <!-- Sem name para não ir com o POST -->
-            </div>
-            <div class="col-12 col-md-3">
-                <label for="estado">Estado:</label>
-                <input type="text" id="estado" class="form-control" required data-parsley-required-message="Preencha o estado" value="<?= $estado ?>" placeholder="Digite o Estado">
-            </div>
-
-            <!-- SEXTA LINHA Endereço, Complemento e Bairro-->
-            <div class="col-12 col-md-12">
+            <div class="col-12 col-md-8">
                 <label for="endereco">Endereco:</label>
                 <input type="text" name="endereco" id="endereco" class="form-control" required data-parsley-required-message="Preencha o endereco" value="<?= $endereco ?>" placeholder="Digite o endereco">
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <label for="complemento">Número e Complemento:</label>
                 <input type="text" name="complemento" id="complemento" class="form-control" value="<?= $complemento ?>" placeholder="Digite o número da casa e o complemento">
             </div>
-
-            <div class="col-12 col-md-6">
+            
+<!-- SEXTA LINHA Bairro, ID, Cidade e Estado-->
+            <div class="col-12 col-md-4">
                 <label for="bairro">Bairro:</label>
                 <input type="text" name="bairro" id="bairro" class="form-control" required data-parsley-required-message="Preencha o bairro" value="<?= $bairro ?>" placeholder="Digite o bairro">
             </div>
+            <div class="col-12 col-md-1">
+                <label for="cidade_id">ID:</label>
+                <input type="text" name="cidade_id" id="cidade_id" class="form-control" readonly data-parsley-required-message="" value="<?= $cidade_id ?>">
+            </div>
 
-            <button type="submit" class="btn btn-success margin">
-                <i class="fas fa-check"></i> Gravar Dados
-            </button>
+            <div class="col-12 col-md-3">
+                <label for="nome_cidade">Nome da Cidade:</label>
+                <input type="text" id="nome_cidade" class="form-control" data-parsley-required-message="Preencha a cidade" value="<?= $cidade ?>" placeholder="Digite seu cidade">
+                <!-- Sem name para não ir com o POST -->
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="estado">Estado:</label>
+                <input type="text" id="estado" class="form-control" required data-parsley-required-message="Preencha o estado" value="<?= $estado ?>" placeholder="Digite o Estado">
+            </div>
+        </div>
 
+        <button type="submit" class="btn btn-success margin">
+            <i class="fas fa-check"></i> Gravar Dados
+        </button>   
     </form>
-    <!-- Scripts -->
+<!-- Scripts -->
     <?php
     //verificar se id é vazio
     if (empty($id)) $id = 0;
@@ -172,12 +194,12 @@ if (!empty($id)) {
 
                     //buscar ID da cidade
                     $.get("buscarCidade.php", {
-                            cidade: dados.localidae,
+                            cidade: dados.localidade,
                             estado: dados.uf
                         },
                         function(dados) {
                             if (dados != "Erro") {
-                                $("#cidade_id").val(dados)
+                                $("#cidade_id").val(dados) //coloca o VALor de dados
                             } else {
                                 alert(dados);
                             }
@@ -188,5 +210,4 @@ if (!empty($id)) {
             }
         })
     </script>
-
 </div>

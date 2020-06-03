@@ -6,7 +6,7 @@
 ?>
 
 <div class="container">
-    <h1 class="float-left">Listar Tipo de Quadrinho</h1>
+    <h1 class="float-left">Listar Personagens</h1>
     <div class="float-right">
         <a href="cadastro/tipo" class="btn btn-success">Novo Registro</a>
         <a href="listar/tipo" class="btn btn-info">Listar Registros</a>

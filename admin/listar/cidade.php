@@ -13,7 +13,7 @@
 
 	<div class="clearfix"></div>
 
-	<table class="table table-striped table-bordered table-hover">
+	<table class="table table-striped table-bordered table-hover" id="tabCidades">
 		<thead>
 			<tr>
 				<td>ID</td>
@@ -66,4 +66,24 @@
 			location.href="excluir/cidade/"+id;
 		}
 	}
+
+	$(document).ready(function() {
+        $("#tabCidades").DataTable({
+            "language": {
+				"search": "Buscar",
+                "lengthMenu": "Mostrar _MENU_ cidades por página",
+                "zeroRecords": "Não encontramos nada :( ",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Não tem nada aqui :( ",
+                "infoFiltered": "(filtrado de _MAX_  no total)",
+                "paginate": {
+                    "first":      "Primeira",
+                    "last":       "Ultima",
+                    "next":       ">>",
+                    "previous":   "<<"
+            }
+            }
+        });
+	})
+	
 </script>
