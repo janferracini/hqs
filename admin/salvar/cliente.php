@@ -123,7 +123,7 @@ if ($_POST) {
         //verifica se o arquivo não está sendo enviado
         if ((empty($_FILES["foto"]["type"])) and (!empty($id))) {
 			$pdo->commit();
-			echo "<script>alert('Registro salvo');location.href='listar/quadrinho';</script>;";
+			echo "<script>alert('Registro salvo');location.href='listar/cliente';</script>;";
             exit;
         }
 
