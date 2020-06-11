@@ -5,9 +5,8 @@ if (!isset($_SESSION["hqs"]["id"])) {
 }
 include "functions.php";
 
-if (!isset($id)) {
-    $id = "";
-} //cria a id se não existir
+if (!isset($id))  $id = ""; //cria a id se não existir
+
 $titulo = $data = $numero = $resumo =  $capa = $valor = $tipo_id = $editora_id = $imagem = $tipo = $nome = '';
 
 // Verificar se existe um id
@@ -50,7 +49,7 @@ if (!empty($id)) {
 ?>
 
 <div class="container">
-    <h1 class="float-left">Cadastro de Quadrinho <?= $id ?></h1>
+    <h1 class="float-left">Cadastro de Quadrinho </h1>
     <div class="float-right">
         <a href="cadastro/quadrinho" class="btn btn-success">Novo Registro</a>
         <a href="listar/quadrinho" class="btn btn-info">Listar Registro</a>
@@ -71,39 +70,34 @@ if (!empty($id)) {
 
             <div class="col-12 col-md-6">
                 <label for="tipo_id">Tipo de Quadrinho</label>
-                <select name="tipo_id" id="tipo_id" class="form-control" required data-parsley-required-message="Selecione uma opção">
-                    <option value="">
-                        <?php
-                        if (!empty($tipo)) {
-                            echo $tipo;
-                        } ?>
-                    </option>
-
+                <input type="text" name="tipo_id" id="tipo_id" class="form-control" list="listaTipos" data-parsley-required-message="Selecione um tipo de quadrinho" value="<?php
+                                                                                                                                                                            if (!empty($tipo_id)) echo "$tipo - $tipo_id";
+                                                                                                                                                                            ?>">
+                <datalist id="listaTipos">
                     <?php
                     $sql = "SELECT id, tipo
-                    FROM tipo
-                    ORDER BY tipo";
+                            FROM tipo
+                            ORDER BY tipo";
                     $consulta = $pdo->prepare($sql);
                     $consulta->execute();
 
                     while ($d = $consulta->fetch(PDO::FETCH_OBJ)) {
                         //separar os dados
-                        $tipo_id     = $d->id;
-                        $tipo   = $d->tipo;
+                        $tipo_id    = $d->id;
+                        $tipo       = $d->tipo;
 
-                        echo '<option value="' . $tipo_id . '">' . $tipo . '</option>';
-                    }
+                        echo '<option value=" ' . $tipo . ' - ' . $tipo_id . '">';
+                    };
                     ?>
-                </select>
+                </datalist>
             </div>
+
             <div class="col-12 col-md-6">
                 <!-- Listagem da Editora -->
                 <label for="editora_id">Editora</label>
-                <input type="text" name="editora_id" id="editora_id" class="form-control" list="listaEditoras"
-                    data-parsley-required-message="Selecione uma editora"
-                    value="<?php
-                        if (!empty($editora_id)) echo "$nome - $editora_id";
-                    ?>">
+                <input type="text" name="editora_id" id="editora_id" class="form-control" list="listaEditoras" data-parsley-required-message="Selecione uma editora" value="<?php
+                                                                                                                                                                            if (!empty($editora_id)) echo "$nome - $editora_id";
+                                                                                                                                                                            ?>">
                 <datalist id="listaEditoras">
                     <?php
                     $sql = "SELECT id, nome
@@ -172,7 +166,7 @@ if (!empty($id)) {
         </button>
     </form>
 
-    
+
     <?php
     //verificar se é edição para adicionar o personagem
     if (!empty($id)) {

@@ -7,6 +7,7 @@ if (!isset($_SESSION["hqs"]["id"])) {
 //verificar se existem dados no POST
 if ($_POST) {
 
+	print_r($_POST);
 	include "functions.php";
 	include "config/conexao.php";
 
@@ -51,7 +52,8 @@ if ($_POST) {
 	} 
 
 	$pdo->beginTransaction();
-	$arquivo = $nome . "-" . $_SESSION["hqs"]["id"];
+	$datanascimento   = formatarDN($datanascimento);
+	$arquivo = $nome . "-" . $id;
 
 
 	//se o id estiver em branco - insert
@@ -120,11 +122,14 @@ if ($_POST) {
 
         //verifica se o arquivo não está sendo enviado
         if ((empty($_FILES["foto"]["type"])) and (!empty($id))) {
+			$pdo->commit();
+			echo "<script>alert('Registro salvo');location.href='listar/quadrinho';</script>;";
+            exit;
         }
 
         //verificar se a imagem é .jpeg
         if ($_FILES["foto"]["type"] != "image/jpeg") {
-            echo "<script>alert('Selecione uma imagem JEPG válida.');hystory.back();</script>";
+            echo "<script>alert('Selecione uma imagem JPEG válida.');history.back();</script>";
             exit;
         }
 
@@ -139,7 +144,7 @@ if ($_POST) {
 			
             //gravar no DB se tudo estiver OK
             $pdo->commit();
-            echo "<script>alert('Registro salvo');location.href='listar/cliente';</script>;";
+			echo "<script>alert('Registro salvo');location.href='listar/cliente';</script>;";
             exit;
         }
 

@@ -4,18 +4,19 @@ if (!isset($_SESSION['hqs']['id'])) {
     exit;
 }
 
+print_r($_POST);
+
 // Verificar se existem dados no POST
 if ($_POST) {
 
     include "functions.php";
     include "config/conexao.php";
 
-    $id = $titulo = $data = $numero = $valor = $resumo = $tipo_id = $editora_id =  '';
+    $id = $titulo = $data = $numero = $valor = $resumo = $tipo_id = $editora_id =  "";
 
     foreach ($_POST as $key => $value) {
         $$key = trim($value);
     }
-
 
     if (empty($titulo)) {
         echo "<script>alert('Preencha o Título');history.back();</script>";
@@ -26,17 +27,29 @@ if ($_POST) {
     } else if (empty($editora_id)) {
         echo "<script>alert('Selecione a Editora');history.back();</script>";
         exit;
+    } else if (empty($numero)) {
+        echo "<script>alert('Indique o numero da edição');history.back();</script>";
+        exit;
+    } else if (empty($resumo)) {
+        echo "<script>alert('Preencha o campo Resumo');history.back();</script>";
+        exit;
+    } else if (empty($valor)) {
+        echo "<script>alert('Indique o valor');history.back();</script>";
+        exit;
+    } else if (empty($data)) {
+        echo "<script>alert('Indique a data de Lançamento');history.back();</script>";
+        exit;
     }
-    //***************COLOCAR O RESTO */
-    //iniciar uma transação
+    //iniciar uma transação com o DB toda alteração pra baixo, só será feito após o commit
     $pdo->beginTransaction();
     //formatando os valores
     $data   = formatar($data);
     $numero = retirar($numero);
     $valor  = formatarValor($valor);
     $editora_id = getEditora($editora_id);
+    $tipo_id = getTipo($tipo_id);
 
-    //salva a time da máquina + a id de quem está na sessão
+    //salva a time da máquina + a id de quem está na sessão como nome do arquivo
     $arquivo = time() . "-" . $_SESSION["hqs"]["id"];
 
     //echo print_r($_POST);
@@ -85,17 +98,21 @@ if ($_POST) {
     //executar SQL depois de ver qual ele vai passar
     if ($consulta->execute()) {
 
-        //verifica se o arquivo não está sendo enviado
+        //verifica se o arquivo não está sendo enviado 
+        //capa deve estar vazia e id não pode estar vazio - editando
         if ((empty($_FILES["capa"]["type"])) and (!empty($id))) {
+            $pdo->commit();
+            echo "<script>alert('Registro salvo');location.href='listar/quadrinho';</script>;";
+            exit;
         }
 
         //verificar se a imagem é .jpeg
         if ($_FILES["capa"]["type"] != "image/jpeg") {
-            echo "<script>alert('Selecione uma imagem JEPG válida.');hystory.back();</script>";
+            echo "<script>alert('Selecione uma imagem JEPG válida.');history.back();</script>";
             exit;
         }
 
-        //copiar a imagem para o servidor
+        //copiar a imagem para a pata de fotos
         if (move_uploaded_file($_FILES["capa"]["tmp_name"], "../fotos/" . $_FILES["capa"]["name"])) {
 
             //redimencionar as imagens
@@ -103,8 +120,6 @@ if ($_POST) {
             $imagem     = $_FILES["capa"]["name"];
             $nome       = $arquivo;
             redimensionarImagem($pastaFotos, $imagem, $nome);
-
-
 
             //gravar no DB se tudo estiver OK
             $pdo->commit();

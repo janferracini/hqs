@@ -78,8 +78,8 @@ if (!empty($id)) {
             </div>
 
             <div class="col-12 col-md-4">
-                <label for="foto">Foto(.jpg):</label>
-                <input type="file" name="foto" id="foto" class="form-control">
+                <label for="foto">Foto(.jpeg):</label>
+                <input type="file" name="foto" id="foto" class="form-control" accept=".jpeg">
             </div>
 
 <!-- TERCEIRA LINHA E-mail e Senha-->

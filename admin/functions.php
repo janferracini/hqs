@@ -134,6 +134,13 @@ function getEditora($editora_id)
 	return $editora_id[1];
 }
 
+function getTipo($tipo_id)
+{
+	// Editora - ID -> ID
+	$tipo_id = explode("-", $tipo_id);
+	return $tipo_id[1];
+}
+
 function formatar($data)
 {
 	// 20/12/2020 -> 2020/12/20
@@ -141,6 +148,12 @@ function formatar($data)
 	return $data[2] . "-" . $data[1] . "-" . $data[0];
 }
 
+function formatarDN($datanascimento)
+{
+	// 20/12/2020 -> 2020/12/20
+	$datanascimento = explode("/", $datanascimento);
+	return $datanascimento[2] . "-" . $datanascimento[1] . "-" . $datanascimento[0];
+}
 
 //formatar valor
 //12.000,00 -> 120000.00
@@ -182,4 +195,4 @@ function fotoCliente($pastaFotos, $imagem, $nome)
 
 	//apagar a imagem antiga
 	unlink($imagem);
-	}
+}
